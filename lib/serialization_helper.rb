@@ -9,8 +9,9 @@ module SerializationHelper
       @extension = helper.extension
     end
 
-    def dump(filename)
+    def dump(dir, filename)
       disable_logger
+      FileUtils.mkdir_p dir
       @dumper.dump(File.new(filename, "w"))
       reenable_logger
     end
@@ -26,7 +27,7 @@ module SerializationHelper
       end
     end
 
-    def load(filename, truncate = true)
+    def load(dir, filename, truncate = true)
       disable_logger
       ActiveRecord::Base.connection.disable_referential_integrity do
         @loader.load(File.new(filename, "r"), truncate)
